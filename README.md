@@ -29,7 +29,6 @@ const About = ({ params, router }) => <View>
   <Text>About {params.message}</Text>
 </View>;
 
-const store = createStore();
 const routes = {
   indexRoute: {
     key: 'home', // required
@@ -49,7 +48,15 @@ const routes = {
   ],
 };
 
-const App = () => <AppContainer />;
+const reducers = {
+  // Your reducers ...
+  router: routerReducer,
+};
+
+const App = () => <AppContainer
+  store={createStore(reducers, {})}
+  routes={routes}
+/>;
 ...
 
 AppRegistry.registerComponent('MyAwesomeApp', App)
