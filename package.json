@@ -1,6 +1,6 @@
 {
   "name": "react-native-ducks-router",
-  "version": "0.1.15",
+  "version": "0.1.16",
   "description": "React native redux router",
   "main": "index.js",
   "repository": {

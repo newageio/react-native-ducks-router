@@ -26,7 +26,7 @@ class Router extends PureComponent {
     }
 
     if (state.routes.length === 0) {
-      push(routes.indexRoute);
+      push({ key: routes.indexRoute.key });
     }
   }
 
