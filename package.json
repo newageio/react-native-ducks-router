@@ -1,6 +1,6 @@
 {
   "name": "react-native-ducks-router",
-  "version": "0.1.1",
+  "version": "0.1.8",
   "description": "React native redux router",
   "main": "index.js",
   "repository": {
@@ -9,9 +9,14 @@
   },
   "author": "intpp",
   "license": "MIT",
-  "dependencies": {
-    "react": "^15.3.2",
-    "react-native": "^0.36.1",
-    "react-redux": "^4.4.5"
+  "peerDependencies": {
+    "react": ">=15.3.2",
+    "react-native": ">=0.36.1",
+    "react-redux": ">=4.4.5"
+  },
+  "devDependencies": {
+    "react": ">=15.3.2",
+    "react-native": ">=0.36.1",
+    "react-redux": ">=4.4.5"
   }
 }

@@ -11,7 +11,6 @@ class Router extends Component {
     this.handleNavigate = this.handleNavigate.bind(this);
     this.handleBackAction = this.handleBackAction.bind(this);
 
-    this.renderRoute = this.renderRoute.bind(this);
     this.renderScene = this.renderScene.bind(this);
   }
 
@@ -37,7 +36,9 @@ class Router extends Component {
     BackAndroid.removeEventListener('hardwareBackPress', this.handleBackAction)
   }
 
-  handleNavigate(action) {
+  handleNavigate(key, params) {
+    const action = { key, params };
+
     return validAction(action) ? this.props.push(action) : false;
   }
 
@@ -60,22 +61,21 @@ class Router extends Component {
     return route;
   }
 
-  renderRoute(key) {
-    const route = this.getRoute(key);
-
-    return route ? route.component : null;
-  }
-
   renderScene({ scene }) {
     const { key, params } = scene.route;
-    const RouteComponent = this.renderRoute(key);
+    const route = this.getRoute(key);
 
-    if (!RouteComponent) {
+    if (!route) {
       throw new Error('Route not found');
     }
+    const { params: defaultParams, component: RouteComponent } = route;
+    const router = {
+      push: this.handleNavigate,
+    };
 
     return <RouteComponent
-      params={params}
+      router={router}
+      params={{ ...defaultParams, ...params }}
     />;
   }
 
@@ -93,11 +93,7 @@ class Router extends Component {
 const RoutePropType = PropTypes.shape({
   key: PropTypes.string.isRequired,
   params: PropTypes.object,
-  component: PropTypes.oneOfType([
-    PropTypes.element,
-    PropTypes.component,
-    PropTypes.func,
-  ]).isRequired,
+  component: PropTypes.any.isRequired,
 });
 
 Router.propTypes = {
