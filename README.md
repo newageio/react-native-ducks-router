@@ -15,6 +15,7 @@ import Router, { routerReducer } from 'react-native-ducks-router';
 
 const Home = ({ params, onPressButton }) => <View>
   <Text>Hello</Text>
+  <Button onPress={onPressButton} title={`Sign In`}/>
 </View>;
 
 const SignIn = ({ params, onPressButton }) => <View>
@@ -75,5 +76,5 @@ const App = () => <AppContainer
 
 ...
 
-AppRegistry.registerComponent('MyAwesomeApp', App)
+AppRegistry.registerComponent('MyAwesomeApp', App);
 ```
