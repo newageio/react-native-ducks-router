@@ -28,12 +28,14 @@ const initialState = {
 
 const actionHandlers = {
   [ROUTER_PUSH]: (state, action) => {
-    if (state.routes[state.index].key === (action.payload && action.payload.key)) {
-      return state;
-    }
+    if (state.routes.length > 0) {
+      if (state.routes[state.index].key === (action.payload && action.payload.key)) {
+        return state;
+      }
 
-    if ((state.routes.length && state.routes[state.routes.length - 1].key) === (action.payload && action.payload.key)) {
-      return state;
+      if (state.routes[state.routes.length - 1].key === (action.payload && action.payload.key)) {
+        return state;
+      }
     }
 
     const newState = StateUtils.push(state, action.payload);
