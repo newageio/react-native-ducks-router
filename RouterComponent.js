@@ -1,10 +1,10 @@
-import React, { Component, PropTypes } from 'react';
-import { BackAndroid, NavigationExperimental, ScrollView } from 'react-native';
+import React, { PureComponent, PropTypes } from 'react';
+import { BackAndroid, Platform, NavigationExperimental } from 'react-native';
 import { connect } from 'react-redux';
 import { validAction, validRoute } from './utils/validators';
 import { actionCreators } from './redux';
 
-class Router extends Component {
+class Router extends PureComponent {
   constructor(props, context) {
     super(props, context);
 
@@ -15,7 +15,7 @@ class Router extends Component {
   }
 
   componentWillMount() {
-    const { routes, push } = this.props;
+    const { routes, push, state } = this.props;
 
     if (!routes.indexRoute) {
       throw new Error('Index route not found in routes config.');
@@ -25,15 +25,21 @@ class Router extends Component {
       throw new Error('Invalid route configuration');
     }
 
-    push(routes.indexRoute);
+    if (state.routes.length === 0) {
+      push(routes.indexRoute);
+    }
   }
 
   componentDidMount() {
-    BackAndroid.addEventListener('hardwareBackPress', this.handleBackAction)
+    if (Platform.OS === 'android') {
+      BackAndroid.addEventListener('hardwareBackPress', this.handleBackAction);
+    }
   }
 
   componentWillUnmount() {
-    BackAndroid.removeEventListener('hardwareBackPress', this.handleBackAction)
+    if (Platform.OS === 'android') {
+      BackAndroid.removeEventListener('hardwareBackPress', this.handleBackAction);
+    }
   }
 
   handleNavigate(key, params) {
@@ -53,9 +59,9 @@ class Router extends Component {
       return indexRoute;
     }
 
-    let route = routes.find((item) => item.key === key);
+    let route = routes.find((item) => item.key === key) || routes.find((item) => item.key === '*');
     if (!route) {
-      route = routes.find((item) => '*')
+      throw new Error('Route not found');
     }
 
     return route;
@@ -63,19 +69,10 @@ class Router extends Component {
 
   renderScene({ scene }) {
     const { key, params } = scene.route;
-    const route = this.getRoute(key);
-
-    if (!route) {
-      throw new Error('Route not found');
-    }
-    const { params: defaultParams, component: RouteComponent } = route;
-    const router = {
-      push: this.handleNavigate,
-    };
+    const { component: RouteComponent } = this.getRoute(key);
 
     return <RouteComponent
-      router={router}
-      params={{ ...defaultParams, ...params }}
+      params={params}
     />;
   }
 
@@ -84,13 +81,13 @@ class Router extends Component {
 
     return state.index !== null ? <NavigationExperimental.CardStack
       navigationState={state}
-      onNavigate={this.handleNavigate}
+      onNavigateBack={this.handleNavigate}
       renderScene={this.renderScene}
     /> : null;
   }
 }
 
-const RoutePropType = PropTypes.shape({
+const RoutePropTypes = PropTypes.shape({
   key: PropTypes.string.isRequired,
   params: PropTypes.object,
   component: PropTypes.any.isRequired,
@@ -99,8 +96,8 @@ const RoutePropType = PropTypes.shape({
 Router.propTypes = {
   state: PropTypes.object.isRequired,
   routes: PropTypes.shape({
-    indexRoute: RoutePropType.isRequired,
-    routes: PropTypes.arrayOf(RoutePropType).isRequired,
+    indexRoute: RoutePropTypes.isRequired,
+    routes: PropTypes.arrayOf(RoutePropTypes).isRequired,
   }).isRequired,
 };
 

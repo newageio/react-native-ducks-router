@@ -13,50 +13,66 @@ import Router, { routerReducer } from 'react-native-ducks-router';
 
 ...
 
-const AppContainer = ({store, routes}) => <Provider store={store}>
-  <Router routes={routes}/>
-</Provider>;
-
-const Home = ({ params, router }) => <View>
+const Home = ({ params, onPressButton }) => <View>
   <Text>Hello</Text>
 </View>;
 
-const SignIn = ({ params, router }) => <View>
+const SignIn = ({ params, onPressButton }) => <View>
   <Text>Sign In</Text>
+  <Button onPress={onPressButton} title={`About Us`}/>
 </View>;
 
-const About = ({ params, router }) => <View>
+const About = ({ params, onPressButton }) => <View>
   <Text>About {params.message}</Text>
+  <Button onPress={onPressButton} title={`Go back`}/>
 </View>;
+
+...
+
+import { connect } from 'react-redux';
+import { actionCreators } from 'react-native-ducks-router';
 
 const routes = {
   indexRoute: {
     key: 'home', // required
-    params: {}, // optional
-    component: Home,
+    component: connect(..., {
+      onPressButton: actionCreators.push.bind(null, { key: 'sign-in' }),
+    })(Home),
   },
   routes: [
     {
       key: 'about',
-      params: { message: 'Us' },
-      component: About,
+      component: connect(..., {
+        onPressButton: actionCreators.pop,
+      })(About),
     },
     {
       key: 'sign-in',
-      component: SignIn,
+      component: connect(..., {
+        onPressButton: actionCreators.push.bind(null, { key: 'about', params: { message: 'Hello' } }),
+      })(SignIn),
     },
   ],
 };
+
+...
 
 const reducers = {
   // Your reducers ...
   router: routerReducer,
 };
 
+...
+
+const AppContainer = ({store, routes}) => <Provider store={store}>
+  <Router routes={routes}/>
+</Provider>;
+
 const App = () => <AppContainer
   store={createStore(reducers, {})}
   routes={routes}
 />;
+
 ...
 
 AppRegistry.registerComponent('MyAwesomeApp', App)
