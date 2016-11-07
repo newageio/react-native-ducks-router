@@ -11,6 +11,7 @@ class Router extends PureComponent {
     this.handleNavigate = this.handleNavigate.bind(this);
     this.handleBackAction = this.handleBackAction.bind(this);
 
+    this.renderHeader = this.renderHeader.bind(this);
     this.renderScene = this.renderScene.bind(this);
   }
 
@@ -67,6 +68,18 @@ class Router extends PureComponent {
     return route;
   }
 
+  renderHeader(sceneProps) {
+    const { header: HeaderComponent } = this.props;
+    const { route: { key } } = sceneProps.scene;
+    const routeProps = this.getRoute(key);
+
+    return HeaderComponent ? <HeaderComponent
+      {...sceneProps}
+      {...routeProps}
+      onNavigateBack={this.handleBackAction}
+    /> : null;
+  }
+
   renderScene({ scene }) {
     const { key, params } = scene.route;
     const { component: RouteComponent } = this.getRoute(key);
@@ -82,6 +95,7 @@ class Router extends PureComponent {
     return state.index !== null ? <NavigationExperimental.CardStack
       navigationState={state}
       onNavigateBack={this.handleNavigate}
+      renderHeader={this.renderHeader}
       renderScene={this.renderScene}
     /> : null;
   }
@@ -95,6 +109,7 @@ const RoutePropTypes = PropTypes.shape({
 
 Router.propTypes = {
   state: PropTypes.object.isRequired,
+  header: PropTypes.oneOfType([PropTypes.func, PropTypes.element,]),
   routes: PropTypes.shape({
     indexRoute: RoutePropTypes.isRequired,
     routes: PropTypes.arrayOf(RoutePropTypes).isRequired,

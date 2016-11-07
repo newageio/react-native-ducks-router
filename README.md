@@ -1,4 +1,4 @@
-# React native ducks router
+# React-Native ducks router
 
 #### Install
 
