@@ -1,5 +1,7 @@
 import { NavigationExperimental } from 'react-native';
 
+import shallowCompare from './utils/shallowCompare';
+
 const { StateUtils } = NavigationExperimental;
 
 const KEY = 'router';
@@ -21,28 +23,31 @@ function pop() {
 
 const initialState = {
   index: null,
-  key: null,
   params: {},
   routes: [],
 };
 
 const actionHandlers = {
   [ROUTER_PUSH]: (state, action) => {
-    if (state.routes.length > 0) {
-      if (state.routes[state.index].key === (action.payload && action.payload.key)) {
-        return state;
-      }
-
-      if (state.routes[state.routes.length - 1].key === (action.payload && action.payload.key)) {
-        return state;
-      }
+    if (state.routes.length === 0 ) {
+      const newState = StateUtils.push(state, action.payload);
+      newState.params = action.payload.params ? action.payload.params : {};
+      return newState;
     }
 
-    const newState = StateUtils.push(state, action.payload);
-    return state.index !== newState.index ? {
-      ...newState,
-      params: action.payload.params ? action.payload.params : {},
-    } : state;
+    const sameRoute = state.routes[state.index].key === (action.payload && action.payload.key);
+    const payloadDiffers = action.payload.params && !shallowCompare(state.params, action.payload.params);
+
+    if (sameRoute && !payloadDiffers) {
+      return state;
+    }
+
+    const newState = sameRoute && payloadDiffers
+      ? StateUtils.replaceAt(state, action.payload.key, action.payload)
+      : StateUtils.push(state, action.payload);
+
+    newState.params = action.payload.params ? action.payload.params : {};
+    return newState
   },
 
   [ROUTER_POP]: (state, action) => state.index > 0 ? StateUtils.pop(state) : state,
