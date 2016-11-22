@@ -68,24 +68,27 @@ class Router extends PureComponent {
     return route;
   }
 
-  renderHeader(sceneProps) {
-    const { header: HeaderComponent } = this.props;
-    const { route: { key } } = sceneProps.scene;
-    const routeProps = this.getRoute(key);
+  getRouteParams(route) {
+    const { defaultParams = {} } = this.getRoute(route.key);
+    const { params = {} } = route;
+    return { ...defaultParams, ...params };
+  }
 
+  renderHeader({ scene: { route } }) {
+    const { header: HeaderComponent } = this.props;
     return HeaderComponent ? <HeaderComponent
-      {...sceneProps}
-      {...routeProps}
+      key={route.key}
+      params={this.getRouteParams(route)}
       onNavigateBack={this.handleBackAction}
     /> : null;
   }
 
-  renderScene({ scene }) {
-    const { key, params } = scene.route;
-    const { component: RouteComponent } = this.getRoute(key);
-
+  renderScene({ scene: { route } }) {
+    const { key } = route;
+    const { component: RouteComponent }  = this.getRoute(key);
     return <RouteComponent
-      params={params}
+      key={key}
+      params={this.getRouteParams(route)}
     />;
   }
 
