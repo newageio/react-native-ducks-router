@@ -1,5 +1,4 @@
 import { NavigationExperimental } from 'react-native';
-
 import shallowCompare from './utils/shallowCompare';
 
 const { StateUtils } = NavigationExperimental;
@@ -29,7 +28,7 @@ const initialState = {
 
 const actionHandlers = {
   [ROUTER_PUSH]: (state, action) => {
-    if (state.routes.length === 0 ) {
+    if (state.routes.length === 0) {
       const newState = StateUtils.push(state, action.payload);
       newState.params = action.payload.params ? action.payload.params : {};
       return newState;
