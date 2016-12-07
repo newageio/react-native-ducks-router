@@ -1,6 +1,5 @@
 // @flow
 import { NavigationExperimental } from 'react-native';
-
 import shallowCompare from './utils/shallowCompare';
 
 const { StateUtils } = NavigationExperimental;
