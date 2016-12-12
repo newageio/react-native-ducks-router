@@ -1,5 +1,7 @@
 # React-Native ducks router
 
+![React-Native-Ducks-Router][https://cl.ly/1n1C0v1y1g3V/ducks_roter.png]
+
 #### Install
 
 ```bash
