@@ -1,6 +1,6 @@
-# [React-Native ducks router](/) &middot; [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md#pull-requests) [![npm version](https://img.shields.io/npm/v/react-native-ducks-router.svg?style=flat)](https://www.npmjs.com/package/react-native-ducks-router)
+# [React-Native ducks router](/) &middot; [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](CONTRIBUTING.md#pull-requests) [![npm version](https://img.shields.io/npm/v/react-native-ducks-router.svg?style=flat-square)](https://www.npmjs.com/package/react-native-ducks-router)
 
-![React-Native-Ducks-Router](https://cl.ly/1n1C0v1y1g3V/ducks_roter.png =250px)
+<img src="https://cl.ly/1n1C0v1y1g3V/ducks_roter.png" height="150"/>
 
 #### Install
 
