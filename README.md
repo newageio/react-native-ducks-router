@@ -3,7 +3,7 @@
 
 <img src="https://cl.ly/1n1C0v1y1g3V/ducks_roter.png" height="150"/>
 
-[![GitHub stars](https://img.shields.io/github/stars/badges/react-native-ducks-router.svg?style=social&label=Star)](https://www.npmjs.com/package/react-native-ducks-router)
+[![GitHub stars](https://img.shields.io/github/stars/badges/react-native-ducks-router.svg?style=social&label=Star)](https://github.com/intpp/react-native-ducks-router)
 
 #### Install
 
