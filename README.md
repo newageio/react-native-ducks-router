@@ -1,6 +1,9 @@
-# [React-Native ducks router](/) &middot; [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](CONTRIBUTING.md#pull-requests) [![npm version](https://img.shields.io/npm/v/react-native-ducks-router.svg?style=flat-square)](https://www.npmjs.com/package/react-native-ducks-router) [![npm version](https://img.shields.io/npm/dm/react-native-ducks-router.svg?style=flat-square)](https://www.npmjs.com/package/react-native-ducks-router)
+# [React-Native ducks router](/) 
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](CONTRIBUTING.md#pull-requests) [![npm version](https://img.shields.io/npm/v/react-native-ducks-router.svg?style=flat-square)](https://www.npmjs.com/package/react-native-ducks-router) [![npm version](https://img.shields.io/npm/dm/react-native-ducks-router.svg?style=flat-square)](https://www.npmjs.com/package/react-native-ducks-router)
 
 <img src="https://cl.ly/1n1C0v1y1g3V/ducks_roter.png" height="150"/>
+
+[![GitHub stars](https://img.shields.io/github/stars/badges/react-native-ducks-router.svg?style=social&label=Star)](https://www.npmjs.com/package/react-native-ducks-router)
 
 #### Install
 
