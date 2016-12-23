@@ -5,15 +5,6 @@ import { validAction, validRoute } from './utils/validators';
 import { actionCreators } from './redux';
 
 class Router extends PureComponent {
-  constructor(props, context) {
-    super(props, context);
-
-    this.handleNavigate = this.handleNavigate.bind(this);
-    this.handleBackAction = this.handleBackAction.bind(this);
-
-    this.renderHeader = this.renderHeader.bind(this);
-    this.renderScene = this.renderScene.bind(this);
-  }
 
   componentWillMount() {
     const { routes, push, state } = this.props;
@@ -43,13 +34,12 @@ class Router extends PureComponent {
     }
   }
 
-  handleNavigate(key, params) {
+  handleNavigate = (key, params) => {
     const action = { key, params };
-
     return validAction(action) ? this.props.push(action) : false;
   }
 
-  handleBackAction() {
+  handleBackAction = () => {
     return this.props.pop();
   }
 
@@ -74,16 +64,17 @@ class Router extends PureComponent {
     return { ...defaultParams, ...params };
   }
 
-  renderHeader({ scene: { route } }) {
+  renderHeader = (sceneProps) => {
+    const { scene: { route } } = sceneProps;
     const { header: HeaderComponent } = this.props;
     return HeaderComponent ? <HeaderComponent
-      key={route.key}
+      sceneProps={sceneProps}
       params={this.getRouteParams(route)}
       onNavigateBack={this.handleBackAction}
     /> : null;
   }
 
-  renderScene({ scene: { route } }) {
+  renderScene = ({ scene: { route } }) => {
     const { key } = route;
     const { component: RouteComponent }  = this.getRoute(key);
     return <RouteComponent
