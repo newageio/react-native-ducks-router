@@ -84,9 +84,9 @@ class Router extends PureComponent {
   }
 
   render() {
-    const { state } = this.props;
-
+    const { state, cardStackProps } = this.props;
     return state.index !== null ? <NavigationExperimental.CardStack
+      {...cardStackProps}
       navigationState={state}
       onNavigateBack={this.handleNavigate}
       renderHeader={this.renderHeader}
@@ -108,6 +108,11 @@ Router.propTypes = {
     indexRoute: RoutePropTypes.isRequired,
     routes: PropTypes.arrayOf(RoutePropTypes).isRequired,
   }).isRequired,
+  cardStackProps: PropTypes.object,
+};
+
+Router.defaultProps = {
+  cardStackProps: {},
 };
 
 const mapStateToProps = ({ router: state }) => ({ state });
