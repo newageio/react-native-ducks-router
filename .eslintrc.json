@@ -1,0 +1,61 @@
+{
+  "parser": "babel-eslint",
+  "extends": [
+    "airbnb-base",
+    "plugin:react/all",
+    "plugin:react-native/all"
+  ],
+  "parserOptions": {
+    "ecmaVersion": 7,
+    "ecmaFeatures": {
+      "jsx": true
+    }
+  },
+  "env": {
+    "mocha": true
+  },
+  "rules": {
+    "react/jsx-uses-vars": 2,
+    "flowtype/space-after-type-colon": [2, "always"],
+    "flowtype/delimiter-dangle": [2, "always-multiline"],
+    "flowtype/require-parameter-type": [0,
+      {
+        "excludeArrowFunctions": "expressionsOnly",
+        "excludeParameterMatch": "^_"
+      }
+    ],
+    "flowtype/require-return-type": [0, "always",
+      {
+        "excludeArrowFunctions": "expressionsOnly"
+      }
+    ],
+    "flowtype/require-variable-type": [0,
+      {
+        "excludeVariableMatch": "^_"
+      }
+    ],
+    "flowtype/semi": [2, "awlays"],
+    "import/no-unresolved": 0,
+    "import/extensions": 0,
+    "import/no-extraneous-dependencies": 0,
+    "no-underscore-dangle": 0,
+    "react/jsx-filename-extension": 0,
+    "react/jsx-indent": 0,
+    "react/jsx-indent-props": 0,
+    "react/jsx-closing-bracket-location": 0,
+    "react/sort-prop-types": 0,
+    "react/forbid-prop-types": 1,
+    "max-len": [2, {
+      "code": 120
+    }]
+  },
+  "plugins": [
+    "react",
+    "react-native",
+    "flowtype"
+  ],
+  "globals": {
+    "React$Element": false,
+    "ReactElement": false
+  }
+}

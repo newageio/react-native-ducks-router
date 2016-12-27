@@ -9,14 +9,33 @@
   },
   "author": "intpp",
   "license": "MIT",
+  "scripts": {
+    "lint": "node_modules/.bin/eslint src",
+    "test": "mocha --compilers js:babel-core/register --require react-native-mock/mock test/redux.test.js"
+  },
   "peerDependencies": {
     "react": ">=15.3.2",
     "react-native": ">=0.36.1",
     "react-redux": ">=4.4.5"
   },
   "devDependencies": {
+    "babel-core": "^6.21.0",
+    "babel-preset-react-native": "^1.9.1",
+    "eslint": "^3.12.2",
+    "eslint-config-airbnb": "^13.0.0",
+    "eslint-plugin-flowtype": "^2.29.1",
+    "eslint-plugin-import": "^2.2.0",
+    "eslint-plugin-react": "^6.8.0",
+    "eslint-plugin-react-native": "^2.2.1",
     "react": ">=15.3.2",
     "react-native": ">=0.36.1",
+    "react-native-mock": "^0.2.9",
     "react-redux": ">=4.4.5"
+  },
+  "dependencies": {
+    "chai": "^3.5.0",
+    "mocha": "^3.2.0",
+    "remove": "^0.1.5",
+    "shallowequal": "^0.2.2"
   }
 }

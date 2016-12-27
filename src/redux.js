@@ -1,6 +1,6 @@
 // @flow
 import { NavigationExperimental } from 'react-native';
-import shallowCompare from './utils/shallowCompare';
+import shallowequal from 'shallowequal';
 
 const { StateUtils } = NavigationExperimental;
 
@@ -61,14 +61,14 @@ const initialState: State = {
 const actionHandlers: Handler<State> = {
   [ROUTER_PUSH]: (state, action: Action<Route>): State => {
     const newRoute = action.payload;
-    if (state.routes.length === 0 ) {
+    if (state.routes.length === 0) {
       return StateUtils.push(state, newRoute);
     }
 
     const currentRoute = state.routes[state.index];
     const sameRoute = currentRoute.key === (newRoute && newRoute.key);
     const payloadDiffers = currentRoute.params
-      && newRoute.params && !shallowCompare(currentRoute.params, newRoute.params);
+      && newRoute.params && !shallowequal(currentRoute.params, newRoute.params);
 
     if (sameRoute && !payloadDiffers) {
       return state;
@@ -79,7 +79,7 @@ const actionHandlers: Handler<State> = {
       : StateUtils.push(state, newRoute);
   },
 
-  [ROUTER_POP]: (state, action: Action<void>): State => state.index > 0 ? StateUtils.pop(state) : state,
+  [ROUTER_POP]: (state): State => (state.index > 0 ? StateUtils.pop(state) : state),
   [ROUTER_RESET]: (state, action: Action<ResetPayload>): State => {
     const { routes, index } = action.payload;
     const newRoutes = Array.isArray(routes) ? routes : [routes];
@@ -107,6 +107,5 @@ export {
 
 export default (state: State = initialState, action: Action<*>): State => {
   const handler = actionHandlers[action.type];
-
   return handler ? handler(state, action) : state;
 };

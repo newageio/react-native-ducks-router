@@ -1,5 +1,5 @@
-import Router from './RouterComponent';
-import routerReducer, { actionCreators, actionTypes, initialState } from './redux';
+import Router from './src/RouterComponent';
+import routerReducer, { actionCreators, actionTypes, initialState } from './src/redux';
 
 export {
   routerReducer,

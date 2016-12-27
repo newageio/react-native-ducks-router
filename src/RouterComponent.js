@@ -39,9 +39,7 @@ class Router extends PureComponent {
     return validAction(action) ? this.props.push(action) : false;
   }
 
-  handleBackAction = () => {
-    return this.props.pop();
-  }
+  handleBackAction = () => this.props.pop();
 
   getRoute(key) {
     const { routes: { routes, indexRoute } } = this.props;
@@ -50,7 +48,7 @@ class Router extends PureComponent {
       return indexRoute;
     }
 
-    let route = routes.find((item) => item.key === key) || routes.find((item) => item.key === '*');
+    const route = routes.find(item => item.key === key) || routes.find(item => item.key === '*');
     if (!route) {
       throw new Error('Route not found');
     }
@@ -68,30 +66,32 @@ class Router extends PureComponent {
     const { scene: { route } } = sceneProps;
     const { header: HeaderComponent } = this.props;
     return HeaderComponent ? <HeaderComponent
-      sceneProps={sceneProps}
-      params={this.getRouteParams(route)}
-      onNavigateBack={this.handleBackAction}
-    /> : null;
-  }
+        onNavigateBack={this.handleBackAction}
+        params={this.getRouteParams(route)}
+        sceneProps={sceneProps}
+      /> : null;
+  };
 
   renderScene = ({ scene: { route } }) => {
     const { key } = route;
-    const { component: RouteComponent }  = this.getRoute(key);
-    return <RouteComponent
-      key={key}
-      params={this.getRouteParams(route)}
-    />;
-  }
+    const { component: RouteComponent } = this.getRoute(key);
+    return (
+      <RouteComponent
+        key={key}
+        params={this.getRouteParams(route)}
+      />
+    );
+  };
 
   render() {
     const { state, cardStackProps } = this.props;
     return state.index !== null ? <NavigationExperimental.CardStack
-      {...cardStackProps}
-      navigationState={state}
-      onNavigateBack={this.handleNavigate}
-      renderHeader={this.renderHeader}
-      renderScene={this.renderScene}
-    /> : null;
+        {...cardStackProps}
+        navigationState={state}
+        onNavigateBack={this.handleNavigate}
+        renderHeader={this.renderHeader}
+        renderScene={this.renderScene}
+      /> : null;
   }
 }
 
@@ -102,8 +102,10 @@ const RoutePropTypes = PropTypes.shape({
 });
 
 Router.propTypes = {
+  push: PropTypes.func.isRequired,
+  pop: PropTypes.func.isRequired,
   state: PropTypes.object.isRequired,
-  header: PropTypes.oneOfType([PropTypes.func, PropTypes.element,]),
+  header: PropTypes.oneOfType([PropTypes.func, PropTypes.element]),
   routes: PropTypes.shape({
     indexRoute: RoutePropTypes.isRequired,
     routes: PropTypes.arrayOf(RoutePropTypes).isRequired,
@@ -113,6 +115,7 @@ Router.propTypes = {
 
 Router.defaultProps = {
   cardStackProps: {},
+  header: null,
 };
 
 const mapStateToProps = ({ router: state }) => ({ state });
