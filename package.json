@@ -11,7 +11,7 @@
   "license": "MIT",
   "scripts": {
     "lint": "node_modules/.bin/eslint src",
-    "test": "mocha --compilers js:babel-core/register --require react-native-mock/mock test/redux.test.js"
+    "test": "mocha --compilers js:babel-core/register --require react-native-mock/mock"
   },
   "peerDependencies": {
     "react": ">=15.3.2",
