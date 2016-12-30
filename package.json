@@ -4,7 +4,7 @@
   "description": "React native redux router",
   "main": "index.js",
   "repository": {
-    "url": "https://github.com/intpp/react-native-ducks-router",
+    "url": "https://github.com/newageio/react-native-ducks-router",
     "type": "git"
   },
   "author": "intpp",
