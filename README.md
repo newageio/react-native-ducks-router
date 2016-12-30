@@ -11,6 +11,12 @@
 npm i --save react-native-ducks-router
 ```
 
+#### Test
+
+```bash
+npm test
+```
+
 #### Usage
 
 ```js
