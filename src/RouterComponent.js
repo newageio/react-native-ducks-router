@@ -6,6 +6,8 @@ import { actionCreators } from './redux';
 
 class Router extends PureComponent {
 
+  handlingBack = false;
+
   componentWillMount() {
     const { routes, push, state } = this.props;
 
@@ -23,23 +25,40 @@ class Router extends PureComponent {
   }
 
   componentDidMount() {
-    if (Platform.OS === 'android') {
-      BackAndroid.addEventListener('hardwareBackPress', this.handleBackAction);
-    }
+    BackAndroid.addEventListener('hardwareBackPress', this.handleHardwareBackAction);
   }
 
   componentWillUnmount() {
-    if (Platform.OS === 'android') {
-      BackAndroid.removeEventListener('hardwareBackPress', this.handleBackAction);
+    BackAndroid.removeEventListener('hardwareBackPress', this.handleHardwareBackAction);
+  }
+
+  handleHardwareBack() {
+    if (Platform.OS === 'android' && !this.handlingBack) {
+      this.handlingBack = true;
+    }
+  }
+
+  unhandleHardwareBack() {
+    if (Platform.OS === 'android' && this.handlingBack) {
+      this.handlingBack = false;
     }
   }
 
   handleNavigate = (key, params) => {
     const action = { key, params };
     return validAction(action) ? this.props.push(action) : false;
-  }
+  };
 
-  handleBackAction = () => this.props.pop();
+  handleBackAction = () => {
+    this.props.pop();
+  };
+
+  handleHardwareBackAction = () => {
+    if (this.handlingBack) {
+      this.handleBackAction()
+    }
+    return true;
+  };
 
   getRoute(key) {
     const { routes: { routes, indexRoute } } = this.props;
@@ -75,10 +94,15 @@ class Router extends PureComponent {
   renderScene = ({ scene: { route } }) => {
     const { key } = route;
     const { component: RouteComponent } = this.getRoute(key);
+    const params = this.getRouteParams(route);
+    this.unhandleHardwareBack();
+    if (typeof params.back === 'undefined' || params.back) {
+      this.handleHardwareBack();
+    }
     return (
       <RouteComponent
         key={key}
-        params={this.getRouteParams(route)}
+        params={params}
       />
     );
   };
