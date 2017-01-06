@@ -1,6 +1,6 @@
 {
   "name": "react-native-ducks-router",
-  "version": "0.1.30",
+  "version": "0.1.31",
   "description": "React native redux router",
   "main": "index.js",
   "repository": {
@@ -12,6 +12,7 @@
   "scripts": {
     "lint": "node_modules/.bin/eslint src",
     "test": "mocha --compilers js:babel-core/register --require react-native-mock/mock"
+    "prepublish": "npm run lint && npm t"
   },
   "peerDependencies": {
     "react": ">=15.3.2",
@@ -36,5 +37,10 @@
   },
   "dependencies": {
     "shallowequal": "^0.2.2"
-  }
+  },
+  "files": [
+    "README.md",
+    "src/",
+    "index.js"
+  ]
 }
