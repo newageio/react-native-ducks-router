@@ -11,7 +11,7 @@
   "license": "MIT",
   "scripts": {
     "lint": "node_modules/.bin/eslint src",
-    "test": "mocha --compilers js:babel-core/register --require react-native-mock/mock"
+    "test": "mocha --compilers js:babel-core/register --require react-native-mock/mock",
     "prepublish": "npm run lint && npm t"
   },
   "peerDependencies": {
