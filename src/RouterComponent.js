@@ -6,8 +6,6 @@ import { actionCreators } from './redux';
 
 class Router extends PureComponent {
 
-  handlingBack = false;
-
   componentWillMount() {
     const { routes, push, state } = this.props;
 
@@ -32,6 +30,8 @@ class Router extends PureComponent {
     BackAndroid.removeEventListener('hardwareBackPress', this.handleHardwareBackAction);
   }
 
+  handlingBack = false;
+
   handleHardwareBack() {
     if (Platform.OS === 'android' && !this.handlingBack) {
       this.handlingBack = true;
@@ -55,7 +55,7 @@ class Router extends PureComponent {
 
   handleHardwareBackAction = () => {
     if (this.handlingBack) {
-      this.handleBackAction()
+      this.handleBackAction();
     }
     return true;
   };
