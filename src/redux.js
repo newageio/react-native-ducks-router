@@ -8,6 +8,8 @@ const KEY = 'router';
 const ROUTER_PUSH = `${KEY}/push`;
 const ROUTER_POP = `${KEY}/pop`;
 const ROUTER_RESET = `${KEY}/reset`;
+const ROUTER_JUMP = `${KEY}/jump`;
+const ROUTER_REMOVE = `${KEY}/remove`;
 
 type Route = {
   key: string,
@@ -53,6 +55,22 @@ function reset(payload: ResetPayload) {
   };
 }
 
+function jump(payload: Route) {
+  return {
+    type: ROUTER_JUMP,
+    payload,
+  };
+}
+
+function remove(payload: Route) {
+  return {
+    type: ROUTER_REMOVE,
+    payload,
+  };
+}
+
+const getIndex = (state: State) => (route: Route) => state.routes.findIndex(stackRoute => stackRoute.key === route.key);
+
 const initialState: State = {
   index: null,
   routes: [],
@@ -85,24 +103,54 @@ const actionHandlers: Handler<State> = {
     const newRoutes = Array.isArray(routes) ? routes : [routes];
     return StateUtils.reset(state, newRoutes, index);
   },
+  [ROUTER_JUMP]: (state, action: Action<Route>): State => StateUtils.jumpTo(state, action.payload.key),
+  [ROUTER_REMOVE]: (state, action: Action<Route>): State => {
+    const index = state.routes.findIndex(route => route.key === action.payload.key);
+    if (index === state.index) {
+      throw new Error('Unable to remove current route, use \'pop\' instead');
+    }
+
+    if (index === -1) {
+      return state;
+    }
+
+    const newRoutes = [
+      ...state.routes.slice(0, index),
+      ...state.routes.slice(index + 1),
+    ];
+
+    return {
+      index: state.index - 1,
+      routes: newRoutes,
+    };
+  },
 };
 
 const actionTypes = {
   ROUTER_PUSH,
   ROUTER_POP,
   ROUTER_RESET,
+  ROUTER_JUMP,
+  ROUTER_REMOVE,
 };
 
 const actionCreators = {
   push,
   pop,
   reset,
+  jump,
+  remove,
+};
+
+const selectors = {
+  getIndex,
 };
 
 export {
   initialState,
   actionTypes,
   actionCreators,
+  selectors,
 };
 
 export default (state: State = initialState, action: Action<*>): State => {

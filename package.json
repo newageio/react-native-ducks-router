@@ -21,6 +21,7 @@
   },
   "devDependencies": {
     "babel-core": "^6.21.0",
+    "babel-eslint": "^7.1.1",
     "babel-preset-react-native": "^1.9.1",
     "chai": "^3.5.0",
     "eslint": "^3.12.2",

@@ -4,6 +4,7 @@ import reducer, {
   actionCreators,
   actionTypes,
   initialState,
+  selectors,
 } from '../src/redux';
 
 const route = { key: 'home', params: { name: 'Alex' } };
@@ -39,6 +40,14 @@ describe('actions creators', () => {
     expect(action).to.eql({
       type: actionTypes.ROUTER_RESET,
       payload: resetPayload,
+    });
+  });
+
+  it('jump', () => {
+    const jumpPayload = actionCreators.jump(route);
+    expect(jumpPayload).to.eql({
+      type: actionTypes.ROUTER_JUMP,
+      payload: route,
     });
   });
 });
@@ -125,4 +134,75 @@ describe('reducer', () => {
       });
     });
   });
+  
+  describe('should handle jump', () => {
+    it('should handle back jump', () => {
+      const state = {
+        index: 1,
+        routes: [route, route2],
+      };
+      const newState = reducer(state, actionCreators.jump(route));
+      expect(newState).to.not.equal(state);
+      expect(newState).to.be.eql({
+        index: 0,
+        routes: [route, route2],
+      });
+    });
+
+    it('should handle forward jump', () => {
+      const state = {
+        index: 0,
+        routes: [route, route2],
+      };
+      const newState = reducer(state, actionCreators.jump(route2));
+      expect(newState).to.not.equal(state);
+      expect(newState).to.be.eql({
+        index: 1,
+        routes: [route, route2],
+      });
+    });
+  });
+
+  describe('should handle remove', () => {
+    const state = {
+      index: 1,
+      routes: [route, route2],
+    };
+    it('should remove route from stack', () => {
+      const newState = reducer(state, actionCreators.remove(route));
+      expect(newState).to.not.equal(state);
+      expect(newState).to.be.eql({
+        index: 0,
+        routes: [route2],
+      });
+    });
+
+    it('should throw exception when trying to remove current route', () => {
+      try {
+        reducer(state, actionCreators.remove(route2));
+        expect(false).to.be.true;
+      } catch (e) {
+
+      }
+    })
+  })
+});
+
+describe('selectors', () => {
+  describe('getIndex', () => {
+    const state = {
+      index: 1,
+      routes: [route, route2],
+    };
+
+    it('should return index of route in stack', () => {
+      const index = selectors.getIndex(state)(route);
+      expect(index).to.be.equal(0);
+    });
+
+    it('should return "-1" if no route in stack', () => {
+      const index = selectors.getIndex(state)(route3);
+      expect(index).to.be.equal(-1);
+    });
+  })
 });

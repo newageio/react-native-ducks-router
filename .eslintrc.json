@@ -45,6 +45,7 @@
     "react/jsx-closing-bracket-location": 0,
     "react/sort-prop-types": 0,
     "react/forbid-prop-types": 1,
+    "react-native/split-platform-components": 0,
     "max-len": [2, {
       "code": 120
     }]
