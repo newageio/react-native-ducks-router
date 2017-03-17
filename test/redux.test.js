@@ -134,7 +134,7 @@ describe('reducer', () => {
       });
     });
   });
-  
+
   describe('should handle jump', () => {
     it('should handle back jump', () => {
       const state = {
@@ -181,11 +181,24 @@ describe('reducer', () => {
       try {
         reducer(state, actionCreators.remove(route2));
         expect(false).to.be.true;
-      } catch (e) {
+      } catch (e) { }
+    });
+  });
 
-      }
-    })
-  })
+  describe('should handle replace', () => {
+    const state = {
+      index: 1,
+      routes: [route, route2],
+    };
+    it('should replace route', () => {
+      const newState = reducer(state, actionCreators.replace({ oldRoute: route.key, newRoute: route3 }));
+      expect(newState).to.not.equal(state);
+      expect(newState).to.be.eql({
+        index: 0,
+        routes: [route3, route2],
+      });
+    });
+  });
 });
 
 describe('selectors', () => {
@@ -204,5 +217,5 @@ describe('selectors', () => {
       const index = selectors.getIndex(state)(route3);
       expect(index).to.be.equal(-1);
     });
-  })
+  });
 });

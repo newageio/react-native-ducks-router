@@ -10,6 +10,7 @@ const ROUTER_POP = `${KEY}/pop`;
 const ROUTER_RESET = `${KEY}/reset`;
 const ROUTER_JUMP = `${KEY}/jump`;
 const ROUTER_REMOVE = `${KEY}/remove`;
+const ROUTER_REPLACE = `${KEY}/replace`;
 
 type Route = {
   key: string,
@@ -33,6 +34,11 @@ type Action<T> = {
 type ResetPayload = {
   routes: Route | Route[],
   index?: number,
+};
+
+type ReplacePayload = {
+  oldRoute: string,
+  newRoute: Route,
 };
 
 function push(payload: Route) {
@@ -65,6 +71,13 @@ function jump(payload: Route) {
 function remove(payload: Route) {
   return {
     type: ROUTER_REMOVE,
+    payload,
+  };
+}
+
+function replace(payload: ReplacePayload) {
+  return {
+    type: ROUTER_REPLACE,
     payload,
   };
 }
@@ -124,6 +137,8 @@ const actionHandlers: Handler<State> = {
       routes: newRoutes,
     };
   },
+  [ROUTER_REPLACE]: (state, action: Action<ReplacePayload>): State =>
+    StateUtils.replaceAt(state, action.payload.oldRoute, action.payload.newRoute),
 };
 
 const actionTypes = {
@@ -132,6 +147,7 @@ const actionTypes = {
   ROUTER_RESET,
   ROUTER_JUMP,
   ROUTER_REMOVE,
+  ROUTER_REPLACE,
 };
 
 const actionCreators = {
@@ -140,6 +156,7 @@ const actionCreators = {
   reset,
   jump,
   remove,
+  replace,
 };
 
 const selectors = {
