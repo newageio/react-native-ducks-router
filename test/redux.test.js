@@ -199,6 +199,32 @@ describe('reducer', () => {
       });
     });
   });
+
+  describe.only('should handle pushOrReplace', () => {
+    const state = {
+      index: 1,
+      routes: [route, route2],
+    };
+
+    it('should replace route with the same name if already exists', () => {
+      const newRoute = { ...route };
+      const newState = reducer(state, actionCreators.pushOrReplace(newRoute));
+      expect(newState).to.not.equal(state);
+      expect(newState).to.be.eql({
+        index: 0,
+        routes: [newRoute, route2],
+      });
+    });
+
+    it('should push route if doesn\'t exist in the stack', () => {
+      const newState = reducer(state, actionCreators.pushOrReplace(route3));
+      expect(newState).to.not.equal(state);
+      expect(newState).to.be.eql({
+        index: 2,
+        routes: [route, route2, route3],
+      });
+    });
+  });
 });
 
 describe('selectors', () => {

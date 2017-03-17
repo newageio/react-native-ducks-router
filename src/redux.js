@@ -11,6 +11,7 @@ const ROUTER_RESET = `${KEY}/reset`;
 const ROUTER_JUMP = `${KEY}/jump`;
 const ROUTER_REMOVE = `${KEY}/remove`;
 const ROUTER_REPLACE = `${KEY}/replace`;
+const ROUTER_PUSH_OR_REPLACE = `${KEY}/pushOrReplace`;
 
 type Route = {
   key: string,
@@ -82,6 +83,13 @@ function replace(payload: ReplacePayload) {
   };
 }
 
+function pushOrReplace(payload: Route) {
+  return {
+    type: ROUTER_PUSH_OR_REPLACE,
+    payload,
+  };
+}
+
 const getIndex = (state: State) => (route: Route) => state.routes.findIndex(stackRoute => stackRoute.key === route.key);
 
 const initialState: State = {
@@ -89,27 +97,32 @@ const initialState: State = {
   routes: [],
 };
 
+function pushReducer(state, action: Action<Route>) {
+  const newRoute = action.payload;
+  if (state.routes.length === 0) {
+    return StateUtils.push(state, newRoute);
+  }
+
+  const currentRoute = state.routes[state.index];
+  const sameRoute = currentRoute.key === (newRoute && newRoute.key);
+  const payloadDiffers = currentRoute.params
+    && newRoute.params && !shallowequal(currentRoute.params, newRoute.params);
+
+  if (sameRoute && !payloadDiffers) {
+    return state;
+  }
+
+  return sameRoute && payloadDiffers
+    ? StateUtils.replaceAt(state, newRoute.key, newRoute)
+    : StateUtils.push(state, newRoute);
+}
+
+function replaceReducer(state, action: Action<ReplacePayload>) {
+  return StateUtils.replaceAt(state, action.payload.oldRoute, action.payload.newRoute);
+}
+
 const actionHandlers: Handler<State> = {
-  [ROUTER_PUSH]: (state, action: Action<Route>): State => {
-    const newRoute = action.payload;
-    if (state.routes.length === 0) {
-      return StateUtils.push(state, newRoute);
-    }
-
-    const currentRoute = state.routes[state.index];
-    const sameRoute = currentRoute.key === (newRoute && newRoute.key);
-    const payloadDiffers = currentRoute.params
-      && newRoute.params && !shallowequal(currentRoute.params, newRoute.params);
-
-    if (sameRoute && !payloadDiffers) {
-      return state;
-    }
-
-    return sameRoute && payloadDiffers
-      ? StateUtils.replaceAt(state, newRoute.key, newRoute)
-      : StateUtils.push(state, newRoute);
-  },
-
+  [ROUTER_PUSH]: pushReducer,
   [ROUTER_POP]: (state): State => (state.index > 0 ? StateUtils.pop(state) : state),
   [ROUTER_RESET]: (state, action: Action<ResetPayload>): State => {
     const { routes, index } = action.payload;
@@ -137,8 +150,17 @@ const actionHandlers: Handler<State> = {
       routes: newRoutes,
     };
   },
-  [ROUTER_REPLACE]: (state, action: Action<ReplacePayload>): State =>
-    StateUtils.replaceAt(state, action.payload.oldRoute, action.payload.newRoute),
+  [ROUTER_REPLACE]: replaceReducer,
+  [ROUTER_PUSH_OR_REPLACE]: (state, action: Action<Route>): State => {
+    const route = action.payload;
+    if (getIndex(state)(route) === -1) {
+      return pushReducer(state, action);
+    }
+    return replaceReducer(state, replace({
+      oldRoute: route.key,
+      newRoute: route,
+    }));
+  },
 };
 
 const actionTypes = {
@@ -148,6 +170,7 @@ const actionTypes = {
   ROUTER_JUMP,
   ROUTER_REMOVE,
   ROUTER_REPLACE,
+  ROUTER_PUSH_OR_REPLACE,
 };
 
 const actionCreators = {
@@ -157,6 +180,7 @@ const actionCreators = {
   jump,
   remove,
   replace,
+  pushOrReplace,
 };
 
 const selectors = {
