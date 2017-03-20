@@ -123,7 +123,17 @@ function replaceReducer(state, action: Action<ReplacePayload>) {
 
 const actionHandlers: Handler<State> = {
   [ROUTER_PUSH]: pushReducer,
-  [ROUTER_POP]: (state): State => (state.index > 0 ? StateUtils.pop(state) : state),
+  [ROUTER_POP]: (state): State => {
+    if (state.index <= 0) {
+      return state;
+    }
+    const routes = state.routes.slice(0, state.index);
+    return {
+      ...state,
+      index: state.index - 1,
+      routes,
+    };
+  },
   [ROUTER_RESET]: (state, action: Action<ResetPayload>): State => {
     const { routes, index } = action.payload;
     const newRoutes = Array.isArray(routes) ? routes : [routes];

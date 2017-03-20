@@ -94,16 +94,40 @@ describe('reducer', () => {
     });
   });
 
-  it('should handle pop', () => {
-    const state = {
-      index: 1,
-      routes: [route, route2],
-    };
-    const newState = reducer(state, actionCreators.pop());
-    expect(newState).to.not.equal(state);
-    expect(newState).to.be.eql({
-      index: 0,
-      routes: [route],
+  describe('should handle pop', () => {
+    it('should pop last route', () => {
+      const state = {
+        index: 1,
+        routes: [route, route2],
+      };
+      const newState = reducer(state, actionCreators.pop());
+      expect(newState).to.not.equal(state);
+      expect(newState).to.be.eql({
+        index: 0,
+        routes: [route],
+      });
+    });
+
+    it('should pop all routes after current', () => {
+      const state = {
+        index: 1,
+        routes: [route, route2, route3],
+      };
+      const newState = reducer(state, actionCreators.pop());
+      expect(newState).to.not.equal(state);
+      expect(newState).to.be.eql({
+        index: 0,
+        routes: [route],
+      });
+    });
+
+    it('should not pop the last one route', () => {
+      const state = {
+        index: 0,
+        routes: [route, route2, route3],
+      };
+      const newState = reducer(state, actionCreators.pop());
+      expect(newState).to.be.equal(state);
     });
   });
 
@@ -200,7 +224,7 @@ describe('reducer', () => {
     });
   });
 
-  describe.only('should handle pushOrReplace', () => {
+  describe('should handle pushOrReplace', () => {
     const state = {
       index: 1,
       routes: [route, route2],
